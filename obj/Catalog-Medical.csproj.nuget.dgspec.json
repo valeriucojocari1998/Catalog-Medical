@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj": {}
+    "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj": {}
   },
   "projects": {
-    "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj": {
+    "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj",
+        "projectUniqueName": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj",
         "projectName": "Catalog-Medical",
-        "projectPath": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj",
-        "packagesPath": "C:\\Users\\valer\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\obj\\",
+        "projectPath": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj",
+        "packagesPath": "C:\\Users\\Alvys-Dev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\valer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Alvys-Dev\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,9 +50,31 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             }
           },
           "imports": [
