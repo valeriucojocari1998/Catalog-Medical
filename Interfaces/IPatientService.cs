@@ -3,11 +3,11 @@ using Catalog_Medical.Models.Requests;
 
 namespace Catalog_Medical.Interfaces;
 
-public interface IPatientRepository
+public interface IPatientService
 {
     Task<IEnumerable<Patient>> GetPatients(PatientFilterRequest filter = null);
     Task<Patient> GetPatientById(string id);
-    Task AddPatient(Patient patient);
-    Task UpdatePatient(Patient patient);
+    Task AddPatient(CreatePatientRequest patient);
+    Task UpdatePatient(UpdatePatientRequest patient);
     Task DeletePatient(string id);
 }

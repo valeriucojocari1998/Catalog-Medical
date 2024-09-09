@@ -3467,23 +3467,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Alvys-Dev\\.nuget\\packages\\": {},
+    "C:\\Users\\valer\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj",
+      "projectUniqueName": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj",
       "projectName": "Catalog-Medical",
-      "projectPath": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\Catalog-Medical.csproj",
-      "packagesPath": "C:\\Users\\Alvys-Dev\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Alvys-Dev\\Documents\\Valeriu-Projects\\Teza\\obj\\",
+      "projectPath": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\Catalog-Medical.csproj",
+      "packagesPath": "C:\\Users\\valer\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\valer\\OneDrive\\Documents\\University\\Teza\\Catalog-Medical\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Alvys-Dev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\valer\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
