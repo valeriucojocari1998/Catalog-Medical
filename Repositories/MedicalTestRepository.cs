@@ -1,6 +1,5 @@
 ﻿using Catalog_Medical.Data;
 using Catalog_Medical.Interfaces;
-using Catalog_Medical.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog_Medical.Repositories;
@@ -14,36 +13,30 @@ public class MedicalTestRepository : IMedicalTestRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<MedicalTest>> GetAllMedicalTestsAsync()
+    public async Task AddMedicalTestAsync(MedicalTest medicalTest)
     {
-        return await _context.MedicalTests.ToListAsync();
-    }
-
-    public async Task<MedicalTest> GetMedicalTestByIdAsync(int id)
-    {
-        return await _context.MedicalTests.FindAsync(id);
-    }
-
-    public async Task<MedicalTest> AddMedicalTestAsync(MedicalTest medicalTest)
-    {
-        _context.MedicalTests.Add(medicalTest);
+        await _context.MedicalTests.AddAsync(medicalTest);
         await _context.SaveChangesAsync();
-        return medicalTest;
     }
 
-    public async Task<MedicalTest> UpdateMedicalTestAsync(MedicalTest medicalTest)
+    public async Task<MedicalTest> GetMedicalTestByIdAsync(string testId)
     {
-        _context.Entry(medicalTest).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-        return medicalTest;
+        return await _context.MedicalTests.FindAsync(testId);
     }
 
-    public async Task DeleteMedicalTestAsync(int id)
+    public async Task<IEnumerable<MedicalTest>> GetMedicalTestsByPatientIdAsync(string patientId)
     {
-        var medicalTest = await _context.MedicalTests.FindAsync(id);
-        if (medicalTest != null)
+        return await _context.MedicalTests
+            .Where(m => m.PatientId == patientId)
+            .ToListAsync();
+    }
+
+    public async Task DeleteMedicalTestAsync(string testId)
+    {
+        var test = await _context.MedicalTests.FindAsync(testId);
+        if (test != null)
         {
-            _context.MedicalTests.Remove(medicalTest);
+            _context.MedicalTests.Remove(test);
             await _context.SaveChangesAsync();
         }
     }

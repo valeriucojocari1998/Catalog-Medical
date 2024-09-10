@@ -1,11 +1,9 @@
-﻿namespace Catalog_Medical.Models.Entities;
-
-public class MedicalTest
+﻿public class MedicalTest
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
+    public string PatientId { get; set; }
     public string TestName { get; set; }
-    public DateTime TestDate { get; set; }
-    public string Results { get; set; }
-    public int PatientId { get; set; }
-    public Patient Patient { get; set; }
+    public DateTime Date { get; set; }
+    public string FileName { get; set; }
+    public byte[] PdfData { get; set; }
 }

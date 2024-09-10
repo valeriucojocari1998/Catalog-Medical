@@ -1,6 +1,4 @@
-﻿using Catalog_Medical.Models.Entities;
-using Catalog_Medical.Models.Requests;
-using Catalog_Medical.Services;
+﻿using Catalog_Medical.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,86 +7,72 @@ namespace Catalog_Medical.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class MedicalTestController : ControllerBase
+public class MedicalTestsController : ControllerBase
 {
-    private readonly MedicalTestService _medicalTestService;
-    private readonly NotificationService _notificationService;
+    private readonly IMedicalTestService _medicalTestService;
 
-    public MedicalTestController(MedicalTestService medicalTestService, NotificationService notificationService)
+    public MedicalTestsController(IMedicalTestService medicalTestService)
     {
         _medicalTestService = medicalTestService;
-        _notificationService = notificationService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<MedicalTest>>> GetAllMedicalTests()
+    // Endpoint to upload a PDF for a specific patient
+    [HttpPost("{patientId}/add-test")]
+    public async Task<IActionResult> AddMedicalTest([FromRoute] string patientId, [FromForm] IFormFile pdfFile, [FromForm] string testName)
     {
-        return Ok(await _medicalTestService.GetAllMedicalTestsAsync());
+        try
+        {
+            await _medicalTestService.AddMedicalTestAsync(patientId, pdfFile, testName);
+            return Ok(new { Message = "Medical test uploaded successfully." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<MedicalTest>> GetMedicalTestById(int id)
+    [HttpGet("{patientId}/tests")]
+    public async Task<IActionResult> GetMedicalTests([FromRoute] string patientId)
     {
-        var medicalTest = await _medicalTestService.GetMedicalTestByIdAsync(id);
-        if (medicalTest == null)
+        var tests = await _medicalTestService.GetMedicalTestsByPatientIdAsync(patientId);
+        return Ok(tests);
+    }
+
+    [HttpGet("test/{testId}")]
+    public async Task<IActionResult> GetMedicalTest([FromRoute] string testId)
+    {
+        var test = await _medicalTestService.GetMedicalTestByIdAsync(testId);
+        if (test == null)
         {
             return NotFound();
         }
-        return Ok(medicalTest);
+
+        return File(test.PdfData, "application/pdf", test.FileName);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<MedicalTest>> AddMedicalTest(CreateMedicalTestRequest request)
+    [HttpGet("test/{testId}/display")]
+    public async Task<IActionResult> DisplayMedicalTestInIframe([FromRoute] string testId)
     {
-        var medicalTest = new MedicalTest
+        var test = await _medicalTestService.GetMedicalTestByIdAsync(testId);
+        if (test == null)
         {
-            TestName = request.TestName,
-            TestDate = request.TestDate,
-            Results = request.Results,
-            PatientId = request.PatientId
-        };
-
-        var createdMedicalTest = await _medicalTestService.AddMedicalTestAsync(medicalTest);
-
-        // Notify all clients about the new medical test
-        await _notificationService.SendNotificationAsync($"New medical test '{createdMedicalTest.TestName}' added for patient ID {createdMedicalTest.PatientId}");
-
-        return CreatedAtAction(nameof(GetMedicalTestById), new { id = createdMedicalTest.Id }, createdMedicalTest);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateMedicalTest(int id, UpdateMedicalTestRequest request)
-    {
-        if (id != request.Id)
-        {
-            return BadRequest();
+            return NotFound();
         }
 
-        var medicalTest = new MedicalTest
-        {
-            Id = request.Id,
-            TestName = request.TestName,
-            TestDate = request.TestDate,
-            Results = request.Results,
-            PatientId = request.PatientId
-        };
-
-        await _medicalTestService.UpdateMedicalTestAsync(medicalTest);
-
-        // Notify all clients about the updated medical test
-        await _notificationService.SendNotificationAsync($"Medical test '{medicalTest.TestName}' updated for patient ID {medicalTest.PatientId}");
-
-        return NoContent();
+        return new FileContentResult(test.PdfData, "application/pdf");
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteMedicalTest(int id)
+    [HttpDelete("test/{testId}")]
+    public async Task<IActionResult> DeleteMedicalTest([FromRoute] string testId)
     {
-        await _medicalTestService.DeleteMedicalTestAsync(id);
-
-        // Notify all clients about the deleted medical test
-        await _notificationService.SendNotificationAsync($"Medical test with ID {id} was deleted.");
-
-        return NoContent();
+        try
+        {
+            await _medicalTestService.DeleteMedicalTestAsync(testId);
+            return Ok(new { Message = "Medical test deleted successfully." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 }
