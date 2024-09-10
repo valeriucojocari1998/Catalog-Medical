@@ -11,8 +11,6 @@ namespace Catalog_Medical.Models.Requests
         public string Gender { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public string MedicalHistory { get; set; }
-        public string BloodType { get; set; }
 
         public Patient UpdatePatient(Patient patient)
         {
@@ -22,8 +20,6 @@ namespace Catalog_Medical.Models.Requests
             patient.Gender = this.Gender;
             patient.PhoneNumber = this.PhoneNumber;
             patient.Email = this.Email;
-            patient.MedicalHistory = this.MedicalHistory;
-            patient.BloodType = this.BloodType;
 
             return patient;
         }

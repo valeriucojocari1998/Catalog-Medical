@@ -2,11 +2,9 @@
 
 public class PatientFilterRequest
 {
-    public string Name { get; set; }
-    public string Gender { get; set; }
-    public string BloodType { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public DateTime? DateOfBirthFrom { get; set; }
-    public DateTime? DateOfBirthTo { get; set; }
+    public string? Name { get; set; } = null;
+    public string? Gender { get; set; } = null;
+    public string? BloodType { get; set; } = null;
+    public string? Email { get; set; } = null;
+    public string? PhoneNumber { get; set; } = null;
 }

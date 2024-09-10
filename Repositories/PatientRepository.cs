@@ -15,9 +15,11 @@ public class PatientRepository : IPatientRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Patient>> GetPatients(PatientFilterRequest filter = null)
+    public async Task<IEnumerable<Patient>> GetPatients(string UserId, PatientFilterRequest filter = null)
     {
         var query = _context.Patients.AsQueryable();
+
+        query = query.Where(x => x.DoctorId == UserId || x.DoctorId == "6efb1a29-ac71-4f97-be3a-4532e61aaec1");
 
         if (!string.IsNullOrEmpty(filter?.Name))
         {
@@ -27,11 +29,6 @@ public class PatientRepository : IPatientRepository
         if (!string.IsNullOrEmpty(filter?.Gender))
         {
             query = query.Where(p => p.Gender == filter.Gender);
-        }
-
-        if (!string.IsNullOrEmpty(filter?.BloodType))
-        {
-            query = query.Where(p => p.BloodType == filter.BloodType);
         }
 
         if (!string.IsNullOrEmpty(filter?.Email))
@@ -44,20 +41,8 @@ public class PatientRepository : IPatientRepository
             query = query.Where(p => p.PhoneNumber.Contains(filter.PhoneNumber));
         }
 
-        if (filter?.DateOfBirthFrom.HasValue == true)
-        {
-            query = query.Where(p => p.DateOfBirth >= filter.DateOfBirthFrom.Value);
-        }
-
-        if (filter?.DateOfBirthTo.HasValue == true)
-        {
-            query = query.Where(p => p.DateOfBirth <= filter.DateOfBirthTo.Value);
-        }
-
         return await query.ToListAsync();
     }
-
-
 
     public async Task<Patient> GetPatientById(string id)
     {

@@ -13,9 +13,9 @@ public class PatientService : IPatientService
         _patientRepository = patientRepository;
     }
 
-    public async Task<IEnumerable<Patient>> GetPatients(PatientFilterRequest filter = null)
+    public async Task<IEnumerable<Patient>> GetPatients(string UserId, PatientFilterRequest filter = null)
     {
-        return await _patientRepository.GetPatients(filter);
+        return await _patientRepository.GetPatients(UserId, filter);
     }
 
     public async Task<Patient> GetPatientById(string id)
@@ -23,10 +23,11 @@ public class PatientService : IPatientService
         return await _patientRepository.GetPatientById(id);
     }
 
-    public async Task AddPatient(CreatePatientRequest request)
+    public async Task<Patient> AddPatient(string UserId, CreatePatientRequest request)
     {
-        var patient = request.ToPatient();
+        var patient = request.ToPatient(UserId);
         await _patientRepository.AddPatient(patient);
+        return patient;
     }
 
     public async Task UpdatePatient(UpdatePatientRequest request)

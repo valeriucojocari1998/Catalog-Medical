@@ -5,7 +5,7 @@ namespace Catalog_Medical.Interfaces;
 
 public interface IPatientRepository
 {
-    Task<IEnumerable<Patient>> GetPatients(PatientFilterRequest filter = null);
+    Task<IEnumerable<Patient>> GetPatients(string UserId, PatientFilterRequest filter = null);
     Task<Patient> GetPatientById(string id);
     Task AddPatient(Patient patient);
     Task UpdatePatient(Patient patient);

@@ -18,10 +18,10 @@ public class PatientsController : ControllerBase
         _patientService = patientService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Patient>>> GetPatients([FromQuery] PatientFilterRequest filter)
+    [HttpPost("{UserId}/list")]
+    public async Task<ActionResult<IEnumerable<Patient>>> GetPatients([FromRoute] string UserId, [FromBody] PatientFilterRequest? filter = null)
     {
-        var patients = await _patientService.GetPatients(filter);
+        var patients = await _patientService.GetPatients(UserId, filter);
         return Ok(patients);
     }
 
@@ -36,16 +36,16 @@ public class PatientsController : ControllerBase
         return Ok(patient);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> AddPatient([FromBody] CreatePatientRequest request)
+    [HttpPost("{UserId}/create")]
+    public async Task<ActionResult> AddPatient([FromRoute] string UserId, [FromBody] CreatePatientRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        await _patientService.AddPatient(request);
-        return NoContent();
+        var res = await _patientService.AddPatient(UserId, request);
+        return Ok(res);
     }
 
     [HttpPut]

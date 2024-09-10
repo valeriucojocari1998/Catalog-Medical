@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -30,12 +29,25 @@ public class Startup
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "db_file/app.db")}");
-        }, ServiceLifetime.Singleton);
+        });
 
-        // Configure Identity
-        services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+        // Configure Identity with custom table names
+        services.AddIdentity<User, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+        })
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+
+        // Rename Identity tables
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlite($"Data Source={Path.Combine(AppContext.BaseDirectory, "db_file/app.db")}");
+        });
 
         // Configure JWT Authentication
         services.AddAuthentication(options =>
@@ -78,11 +90,14 @@ public class Startup
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-        // Register services and repositories
-        services.AddSingleton<IMedicalTestRepository, MedicalTestRepository>();
-        services.AddSingleton<PatientService>();
-        services.AddSingleton<MedicalTestService>();
-        services.AddSingleton<NotificationService>();
+        // Register services and repositories with correct scope
+        services.AddScoped<IMedicalTestRepository, MedicalTestRepository>();
+        services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPatientService, PatientService>();
+        services.AddScoped<MedicalTestService>();
+        services.AddScoped<NotificationService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider svp)
