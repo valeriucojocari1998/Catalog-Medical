@@ -30,6 +30,20 @@ public class PatientService : IPatientService
         return patient;
     }
 
+    public async Task<Patient> EditPatient(string patientId, CreatePatientRequest request)
+    {
+        var patient = await _patientRepository.GetPatientById(patientId);
+
+        patient.Name = request.Name;
+        patient.DateOfBirth = request.DateOfBirth;
+        patient.Gender = request.Gender;
+        patient.PhoneNumber = request.PhoneNumber;
+        patient.Email = request.Email;
+
+        await _patientRepository.UpdatePatient(patient);
+        return patient;
+    }
+
     public async Task UpdatePatient(UpdatePatientRequest request)
     {
         var currentPatient = await GetPatientById(request.Id);

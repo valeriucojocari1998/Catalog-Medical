@@ -96,7 +96,7 @@ public class Startup
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IPatientService, PatientService>();
-        services.AddScoped<MedicalTestService>();
+        services.AddScoped<IMedicalTestService, MedicalTestService>();
         services.AddScoped<NotificationService>();
     }
 

@@ -13,22 +13,39 @@ public class MedicalTestRepository : IMedicalTestRepository
         _context = context;
     }
 
-    public async Task AddMedicalTestAsync(MedicalTest medicalTest)
-    {
-        await _context.MedicalTests.AddAsync(medicalTest);
-        await _context.SaveChangesAsync();
-    }
-
     public async Task<MedicalTest> GetMedicalTestByIdAsync(string testId)
     {
         return await _context.MedicalTests.FindAsync(testId);
     }
 
-    public async Task<IEnumerable<MedicalTest>> GetMedicalTestsByPatientIdAsync(string patientId)
+    public async Task<MedicalTest> AddMedicalTestAsync(MedicalTest medicalTest, IFormFile pdfFile)
+    {
+        var filePath = await SaveFileAsync(pdfFile);
+        medicalTest.FileUrl = filePath;
+        _context.MedicalTests.Add(medicalTest);
+        await _context.SaveChangesAsync();
+        return medicalTest;
+    }
+
+    public async Task<List<MedicalTest>> GetMedicalTestsByPatientIdAsync(string patientId)
     {
         return await _context.MedicalTests
-            .Where(m => m.PatientId == patientId)
+            .Where(mt => mt.PatientId == patientId)
             .ToListAsync();
+    }
+
+    private async Task<string> SaveFileAsync(IFormFile file)
+    {
+        var folderPath = Path.Combine("MedicalTestFiles");
+        Directory.CreateDirectory(folderPath);
+
+        var filePath = Path.Combine(folderPath, $"{Guid.NewGuid()}_{file.FileName}");
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        return filePath;
     }
 
     public async Task DeleteMedicalTestAsync(string testId)

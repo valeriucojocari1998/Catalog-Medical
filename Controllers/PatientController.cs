@@ -48,16 +48,17 @@ public class PatientsController : ControllerBase
         return Ok(res);
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdatePatient([FromBody] UpdatePatientRequest request)
+    [HttpPost("{patientId}/edit")]
+    public async Task<IActionResult> EditPatient([FromRoute]string patientId, [FromBody] CreatePatientRequest request)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        await _patientService.UpdatePatient(request);
-        return NoContent();
+        var result = await _patientService.EditPatient(patientId, request);
+
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]

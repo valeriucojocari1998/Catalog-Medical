@@ -1,5 +1,4 @@
 ﻿using Catalog_Medical.Interfaces;
-using Catalog_Medical.Models.Entities;
 
 namespace Catalog_Medical.Services;
 
@@ -12,28 +11,17 @@ public class MedicalTestService : IMedicalTestService
         _medicalTestRepository = medicalTestRepository;
     }
 
-    public async Task AddMedicalTestAsync(string patientId, IFormFile pdfFile, string testName)
+    public async Task<MedicalTest> AddMedicalTestAsync(string patientId, string title, string description, string date, IFormFile file)
     {
-        if (pdfFile == null || pdfFile.Length == 0 || Path.GetExtension(pdfFile.FileName) != ".pdf")
+        var medicalTest = new MedicalTest
         {
-            throw new Exception("Invalid PDF file.");
-        }
+            PatientId = patientId,
+            Title = title,
+            Description = description,
+            Date = DateTime.UtcNow
+        };
 
-        using (var memoryStream = new MemoryStream())
-        {
-            await pdfFile.CopyToAsync(memoryStream);
-            var medicalTest = new MedicalTest
-            {
-                Id = Guid.NewGuid().ToString(),
-                PatientId = patientId,
-                TestName = testName,
-                FileName = pdfFile.FileName,
-                Date = DateTime.UtcNow,
-                PdfData = memoryStream.ToArray() // Store the PDF data as BLOB
-            };
-
-            await _medicalTestRepository.AddMedicalTestAsync(medicalTest);
-        }
+        return await _medicalTestRepository.AddMedicalTestAsync(medicalTest, file);
     }
 
     public async Task<IEnumerable<MedicalTest>> GetMedicalTestsByPatientIdAsync(string patientId)

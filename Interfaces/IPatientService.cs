@@ -8,6 +8,6 @@ public interface IPatientService
     Task<IEnumerable<Patient>> GetPatients(string UserId, PatientFilterRequest? filter = null);
     Task<Patient> GetPatientById(string id);
     Task<Patient> AddPatient(string UserId, CreatePatientRequest patient);
-    Task UpdatePatient(UpdatePatientRequest patient);
+    Task<Patient> EditPatient(string patientId, CreatePatientRequest request);
     Task DeletePatient(string id);
 }
