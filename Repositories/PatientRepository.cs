@@ -19,11 +19,11 @@ public class PatientRepository : IPatientRepository
     {
         var query = _context.Patients.AsQueryable();
 
-        query = query.Where(x => x.DoctorId == UserId || x.DoctorId == "6efb1a29-ac71-4f97-be3a-4532e61aaec1");
+        query = query.Where(x => x.DoctorId == UserId);
 
         if (!string.IsNullOrEmpty(filter?.Name))
         {
-            query = query.Where(p => p.Name.Contains(filter.Name));
+            query = query.Where(p => p.Name.ToLower().Contains(filter.Name.ToLower()));
         }
 
         if (!string.IsNullOrEmpty(filter?.Gender))
@@ -33,7 +33,7 @@ public class PatientRepository : IPatientRepository
 
         if (!string.IsNullOrEmpty(filter?.Email))
         {
-            query = query.Where(p => p.Email.Contains(filter.Email));
+            query = query.Where(p => p.Email.ToLower().Contains(filter.Email.ToLower()));
         }
 
         if (!string.IsNullOrEmpty(filter?.PhoneNumber))
